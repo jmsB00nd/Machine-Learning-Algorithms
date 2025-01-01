@@ -19,6 +19,10 @@ class Layer(object):
     def __init__(self,size, in_size, activation=Logistic()):
         self.neurons = [Neuron(in_size, activation) for i in range(size)]
         
+    def randomize(self):
+        for neuron in self.neurons:
+            neuron.randomize()
+        
     def forward(self, X):
         activations = []
         for neuron in self.neurons:
