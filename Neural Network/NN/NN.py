@@ -11,7 +11,7 @@ def backpropagate_network(layers, cost, H, Y):
     delta_past = cost.partial(H, Y)
     w_past = np.ones((delta_past.shape[0], 1)) 
     for layer in reversed(layers):
-        delta_past, w_past = backpropagate_layer(layer.neurons, delta_past, w_past)
+        delta_past, w_past = layer.backward(delta_past, w_past)
 
     return J
 
@@ -44,17 +44,14 @@ class NN(object):
     
     
     def _one_iteration(self, X, Y):
-        # forward propagation
         a = X
         for layer in self.layers:
             a = layer.forward(a)
             
-        # cost and its derivative calculation
         YY = np.array(Y)
         if YY.ndim < 2 : 
             YY = YY[:, np.newaxis]
         
-        # backward propagation 
         J = backpropagate_network(self.layers, self.cost, a, YY)
     
         return J
